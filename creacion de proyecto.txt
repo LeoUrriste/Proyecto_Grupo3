@@ -1,4 +1,4 @@
-video explicacion: 
+video explicacion:
 https://bbbcapacitaciones.chaco.gob.ar/playback/presentation/2.3/172924dff0fc94b2631d71f149200e295e0f1cd5-1700175763783
 
 1- abrir la carpeta donde quiero crear el entorno en vsc

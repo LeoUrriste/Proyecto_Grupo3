@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %}
+<title>Inicio</title>
+{% endblock %}
+{% block navegacion %}
+{% include 'navegacion.html' %}
+{% endblock %}
+{% block content %}
+<div class="card text-bg-dark">
+    <img class="card-img" src="{% static 'imagen/fondo.jpg' %}" alt="libreria">
+</div>
+
+{% endblock %}

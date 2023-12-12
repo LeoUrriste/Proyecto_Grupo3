@@ -1,0 +1,1049 @@
+video explicacion: 
+https://bbbcapacitaciones.chaco.gob.ar/playback/presentation/2.3/172924dff0fc94b2631d71f149200e295e0f1cd5-1700175763783
+
+1- abrir la carpeta donde quiero crear el entorno en vsc
+
+2- crear entorno virtual
+	py -m venv venv
+
+3 -activar entorno
+	.\venv\Scripts\activate
+(para desactivar entorno: deactivate)
+
+4- instalar django en el entorno:
+	pip install django
+
+5- crear proyecto
+	django-admin startproject "nombre_proyecto ."
+
+6-l evantar servidor
+	py manage.py runserver
+(CTRL+C para el servidor)
+
+7- crear estructura de carpetas ("mkdir" comando para crear carpetas)
+	mkdir apps, static, media, templates
+
+8- En "settings.py" configuraciones
+	incorporar carpeta "template"
+		'DIRS': [BASE_DIR / 'templates']
+
+	esperar	
+---------------------------------------------------------------------------------------------------------------------------------------------
+		LANGUAGE_CODE = 'es-ar'
+
+		TIME_ZONE = 'America/Argentina/Buenos_Aires'
+En la linea 119: 
+	STATICFILES_FINDERS = [
+ 	     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+	     'django.contrib.staticfiles.finders.FileSystemFinder',
+	]
+
+	al final del codigo
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+	
+	en "TEMPLATE" 
+		'django.template.context_processors.media',
+
+En "url.py"
+	linea 19:  from django.conf import settings
+		   from django.conf.urls.static import static
+
+	linea 26: 
+# Configuración para servir archivos de medios durante el desarrollo
+if settings.DEBUG: 
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+9- para manejar imagenes
+	pip install pillow
+
+10- MIGRACIONES:
+
+	py manage.py makemigrations (prepara para la migracion)
+
+	py manage.py migrate (hace las migraciones)
+
+mi comision4:minuto -18 aprox
+https://bbbcapacitaciones.chaco.gob.ar/playback/presentation/2.3/c26f918ef59edd123222a4d5b32d29a63fbae5fe-1699897834196
+
+11- en carpeta "template"
+
+	crear archivo : index.html (escribir "cualquier cosa"
+
+12-  en la carpeta del proyecto crear:
+	 archivo: views.py
+	agregar en el archivo:
+	from django.shortcuts import render
+
+	def index(request):
+   	      template_name = 'index.html'
+    	     return render(request, template_name)
+
+13- en las urls.py crear:
+ importar:
+
+	from .views import index
+
+crear path
+
+	path( ' ', index)
+
+	(puedo dejar el----- "path(' ', index),"------ )
+
+14- crear lista de aplicaciones instaladas
+
+	pip freeze > requirements.txt
+
+(para instalar esos archivos:
+ pip install -r requirements.txt
+con el entorno activado)
+
+15- en el archivo: views.py
+
+	def index(request):
+    	      template_name = 'index.html'
+    	      context = {'nombre': 'informatorio'}
+    	      return render(request, template_name, context)
+
+16- en views.py
+
+	def contacto(request):
+	    template_name = 'contacto.html'
+	    context = {'nombre': 'contacto'}
+	    return render(request, template_name, context)
+ 
+17-  creo en template 
+	contacto.html
+
+18- copio lo del index y modifico
+	queda:
+	{% extends 'base.html' %}
+
+	{% block titulo %}
+	<title>contaco #dinamico</title>
+	{% endblock %}
+
+	{% block content %}
+    	   <p>hola desde contaco</p>
+ 	   <p>{{nombre}} </p>
+
+	{% endblock %}
+
+19- hacer el path en urls
+
+	path('contacto/', contacto)
+
+	modificamos :
+	from .views import index
+	por :
+	from .views import *
+
+20- BASE DE DATOS
+	crear base de datos en mysql y luego en settings.py modificar en linea 76
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db_grupo3',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
+
+Con el entorno activado
+
+pip install mysqlclient
+
+21- En la carpeta apps crear la aplicacion:
+	django-admin startapp "ejemp. usuarios"
+
+22- modificar el lenguage / time zone 
+
+LANGUAGE_CODE = 'es-ar'
+
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
+
+23- crear super usuario si no lo creaste
+
+	py manage.py createsuperuser
+
+24- al crear las carpetas de apps y otras en el setting.py
+INSTALLED_APPS:
+		'apps.usuarios',
+
+25- en apps\usuarios archivo apps.py cambiar el name
+		
+		name = 'apps.<nombre de la apps>'
+
+26- en el archivo models.py de apps\usuarios importar 
+
+	from django.contrib.auth.models import AbstractUser
+
+#aca al crear la clase puedo definir si un usuario es administrador o colaborador (--es_colaborador = models.BooleanField(default=False)--) pero lo activamos en 
+el acceso de administrador
+
+class Usuarios(AbstractUser):
+    nombre = models.CharField(max_length=20)
+    apellido = models.CharField(max_length=20)
+    fecha_nacimiento = models.DateField('Fecha_nacimiento', default='2000-1-1')
+    es_colaborador = models.BooleanField(default=False)
+    imagen = models.ImageField(null= True, blank= True , upload_to='usuarios/defaul.png')
+    
+    def __str__(self):
+        return self.nombre
+
+# creamos en la carpeta media otra carpeta llamada uruarios para las imagenes de los usuarios
+ 
+una vez guardado ir a admin.py del usuario y registrar el modelo e importamos
+
+	from .models import Usuarios
+
+	admin.site.register(Usuarios)
+
+27- instalar pillow:
+
+	python -m pip install Pillow
+
+	#actualizo archivo requiriments:  pip freeze > requirements.txt
+
+28- agregar en el settings.py
+	#a eleccion donde : opcional antes de installed_apps
+
+	AUTH_USER_MODEL = 'usuarios.Usuarios'
+
+29- hacemos migracion:
+
+	py manage.py makemigrations 
+
+	py manage.py migrate 
+
+	si da error podemos borrar base de datos (drop schema) y volver a crear con el mismo nombre #solucion rapida, si no borrar tabla (no se cual)#
+
+	ejecutamos el " migrate "
+
+30- crear en carpeta apps\usuarios archivo:   " forms.py "  ( para manejar el formulario, seleccionando los campos que queremos nosotros )
+      (si usamos el que viene por defecto tiene muchos campos)
+
+	from typing import Any
+	from .models import Usuarios
+	from django.contrib.auth.forms import UserCreationForm
+	from django.db import transaction
+
+	class RegistrarUsuariosForm(UserCreationForm):
+	    class Meta:
+	        model = Usuarios
+	        fields = ['nombre','apellido','fecha_nacimiento','usurname','password1','password2','email','imagen']
+        
+	    @transaction.atomic
+	    def save(self):
+	        user = super().save(comit=False)
+	        user.is_superuser = False
+	        user.is_staff = False
+	        user.save()
+	        return user
+
+31- en apps\usuarios en al archivo views.py ( creamos vista basada en clases )
+
+	from django.shortcuts import render
+	from django.urls import reverse_lazy
+	from django.views.generic import CreateView
+
+	from.models import Usuarios
+	from .forms import RegistrarUsuariosForm
+
+	# Create your views here.
+	class RegistrarUsuario(CreateView):
+	    model = Usuarios
+	    form_class = RegistrarUsuariosForm
+	    template_name = 'usuarios/registrar_usuarios.html'
+	    success_url = reverse_lazy('inicio')
+
+32- en url : modificamos urlpatterns
+
+	          path('', index, name='inicio'),
+agregamos         path('usuarios/', include('apps.usuarios.urls')), 
+
+
+importamos include , quedando asi
+
+	from django.urls import path, include
+
+33- en la carpeta apps\usuarios crear archivo: "  urls.py  "
+
+	from django.urls import path
+	from .views import *  
+
+	app_name = 'apps.usuarios'
+
+	urlpatterns = [
+	    path('registrar/', RegistrarUsuario.as_view(), name = 'registrar'),
+	]
+
+34- modificamos base.html
+
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    {% block titulo %} {% endblock %}
+	    <!--Bootstrap-->
+	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	    <!--css propio-->
+    
+	</head>
+	<body>
+	    {% include 'navegacion.html' %}
+    
+	    {% block content %} {% endblock %}
+    
+
+	    <footer>
+	        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	    </footer>
+	</body>
+	</html>
+
+	en la carpeta static creampos carpetas : css , img
+	en css creamos el archivo estilos.css
+
+	luego en setting.py en STATIC
+	linea 125:
+
+	STATICFILES_DIRS = [
+	    BASE_DIR / 'static'
+	]
+
+	MEDIA_URL = 'media/'
+	MEDIA_ROOT = BASE_DIR / 'media'
+
+35- en el archivo registrar_usuarios.html
+
+	{% extends 'base.html' %}
+	{% load static %}
+
+	{% block titulo %}
+	<title>Registrar usuario</title>
+	{% endblock %}
+
+	{% block titulo %}
+	{% include 'navegacion.html' %}
+	{% endblock %}
+
+	{% block titulo %}
+
+	<form enctype="multipart/form-data" action="" method="post">{% csrf_token %}
+	{{ form }}
+	<button type="submit" class="btn btn-primary">Registrarse</button>
+	</form>
+
+
+	{% endblock %}
+
+36- en el navegacion.html :
+
+<nav>
+    <ul>
+        <li>Inicio</li>
+        <li>Categorías</li>
+        <li><a href="{% url 'contacto' %}">Contacto</a></li>
+        <li><a href="{% url 'apps.usuarios:registrar' %}">Registrarse</a></li>
+        <li>Acerca de</li>
+    </ul>
+</nav>
+
+37- crear super usuario:
+	python manage.py createsuperuser
+
+38- crear archivo " iniciar_sesion.html " en la carpeta: template/usuarios
+
+base:
+
+{% extends 'base.html' %}
+
+
+{% block titulo %}
+<title>Iniciar sesion</title>
+{% endblock %}
+
+{% block navegacion %}
+{% include 'navegacion.html' %}
+{% endblock %}
+
+{% block content %}
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+</form>
+{% endblock %}
+
+
+39- luego en carpeta: apps/usuarios en el archivo url.py
+
+	from django.contrib.auth.views import LoginView, LogoutView
+
+	path('iniciar_sesion/',LoginView.as_view(template_name = 'usuarios/iniciar_sesion.html'), name= 'iniciar_sesion'),
+    	path('cerrar_sesion/', LogoutView.as_view(), name='cerrar_sesion'),
+
+40- en el template navegacion.html agregar 
+
+	<li>Iniciar sesion</li>
+
+y aplicamos if quedando asi: ---falta mejorar esta parte ---
+
+	<nav>
+    <ul>
+        <li>Inicio</li>
+        <li>Categorías</li>
+        <li>Contatos</li>
+        {% if user.is_authenticated %}
+        
+        <li>Cerrar sesion</li>
+        {% else %}
+        <li>Registrarse</li>
+        <li>Iniciar sesion</li>
+        {% endif %}
+        <li>Acerca de</li>
+    </ul>
+</nav>
+
+41- configuramos en el setting.py :
+
+	from django.urls import reverse_lazy	
+
+	LOGIN_URL = reverse_lazy('apps,usuarios:iniciar_sesion')
+	LOGIN_REDIRECT_URL = reverse_lazy('inicio')
+	LOGOUT_REDIRECT_URL = = reverse_lazy('inicio')
+
+42- creamos nueva aplicacion en apps:
+
+	django-admin startapp "  post  " (nosotros)
+
+43-en post: archivo " models.py "  :
+
+	from django.db import models
+	from apps.usuarios.models import Usuarios
+
+
+	class Categoria(models.Model):
+	    nombre = models.CharField(max_length=20, null=False, unique=True)
+    
+	    def __str__(self):
+	        return self.nombre
+    
+	class Post(models.Model):
+	    titulo = models.CharField(max_length=50 , null=False)
+	    autor = models.CharField(max_length=20, null=False)
+	    texto = models.TextField()
+	    fecha_agregado = models.DateTimeField(auto_now_add=True)
+	    colaborador = models.ForeignKey(Usuarios, on_delete=models.SET_NULL, null=True,default=2)
+	    Categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
+	    imagen = models.ImageField(null=True,blank=True, upload_to='post', default='post/default.png')
+    
+	    def __str__(self):
+	        return self.titulo
+    
+  	  class Meta:
+  	      ordering = ('-fecha_agregado',)
+
+-en post/apps.py modificar (agregar carpeta "apps" en name)
+
+	from django.apps import AppConfig
+
+
+	class PostConfig(AppConfig):
+	    default_auto_field = 'django.db.models.BigAutoField'
+	    name = 'apps.post'
+
+-en post/admin.py
+
+	from django.contrib import admin
+	from.models import Post,Categoria
+
+
+
+	admin.site.register(Post)
+	admin.site.register(Categoria)
+
+
+-luego en setting.py : agregar app
+
+	'apps.post',
+
+-hacer migracion
+	
+	py manage.py makemigrations 
+
+	py manage.py migrate 
+
+44- en post archivo views.py :
+
+	from django.shortcuts import render
+	from django.views.generic.edit import CreateView, UpdateView, DeleteView
+	from django.urls import reverse_lazy
+
+	from .models import Categoria
+
+
+	# Create your views here.
+
+	class AgregarCategoria(CreateView):
+	    model = Categoria
+	    fields = ['nombre']
+	    template_name = 'post/agregar_categoria.html'
+	    success_url = reverse_lazy('inicio')
+
+
+45- en las urls.py generales crear path
+
+	path("post/", include('apps.post.urls')),
+
+
+
+46- en apps/post crear el archivo urls.py
+
+	from django.urls import path
+
+	from .views import AgregarCategoria
+
+	app_name = 'apps.post'
+
+	urlpatterns = [
+	    path("agregar_categoria/", AgregarCategoria.as_view(), name='agregar_categoria'),
+	]
+
+
+47- en template crear carpeta post y adentro el archivo :
+
+	agregar_categoria.html
+
+	{% extends 'base.html' %}
+	{% load static %}
+	{% block titulo %}
+	<title>Agregar categoria</title>
+	{% endblock %}
+	
+	{% block navegacion %}
+	{% include 'navegacion.html' %}
+	{% endblock %}
+
+	{% block content %}
+
+	<form method="post">
+	    {% csrf_token %}
+	    <h2>Agregar Categoria</h2>
+	    <div>
+	        {{form.as_p}}
+	        <input type="submit" value="Guardar">
+	    </div>
+	</form>
+	{% endblock %}
+
+
+48-  para agregar post en el archivo views.py de apps/post :
+
+	from .models import Post
+
+	class AgregarPost(CreateView):
+	    model = Post
+	    fields = ['titulo','autor','texto','imagen','Categoria']
+	    template_name = 'post/agregar_post.html'
+	    success_url = reverse_lazy('inicio')
+    
+ 	  def form_valid(self, form):
+	        form.instance.colaborador = self.request.user
+		
+49- agregar el path en 
+
+from .views import AgregarCategoria, AgregarPost
+
+path("agregar_post/", AgregarPost.as_view(), name='agregar_post'),
+
+
+50- crear en template/post el archivo agregar_post.html
+
+% extends 'base.html' %}
+{% load static %}
+{% block titulo %}
+<title>Agregar post</title>
+{% endblock %}
+
+{% block navegacion %}
+{% include 'navegacion.html' %}
+{% endblock %}
+
+{% block content %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h2>Agregar Post</h2>
+    <div>
+        {{form.as_p}}
+        <input type="submit" value="Guardar">
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Post cargado!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Su Post fue cargado con éxito! </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+51- para lsitar post en views.py :
+
+	from django.views.generic import ListView
+
+	class ListarPost(ListView):
+	    model = Post
+	    template_name = 'post/listar_post.html'
+	    context_object_name = 'post'
+
+en urls.py :
+
+	path("listar_post/", ListarPost.as_view(), name='listar_post'),
+
+crear html ( listar_post.html )
+
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %}
+<title>Listar post</title>
+{% endblock %}
+
+{% block navegacion %}
+{% include 'navegacion.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="margin-top: 2%">
+    <div class="mbr-section-head">
+        <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2" style="text-align: center;">
+            <strong>Post</strong>
+        </h3>
+    </div>
+    <div class="row" style="margin-bottom: 2%;">
+        {% for p in post %}
+        <div class="col-md-4 mb-3">
+            <div class="card" style="text-align: center;">
+                <div class="card-img-top" style="display: block; width: 70%; margin: auto;">
+                    <img src="{{ p.imagen.url }}" class="card-img-top w-50" alt="{{p.titulo}}">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{p.titulo}}</h5>
+                    <p style='text-align: center;' class="mbr-timeline-date "><small
+                            class="text-body-secondary">{{p.fecha_agregado}}</small></p>
+                    <p class="card-text">Si quiere leer mas acerca de este post, click en leer más</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Categoria: {{p.categoria}}</li>
+                    <li class="list-group-item">Autor: {{p.autor}}</li>
+                    <li class="list-group-item">Agregado por: {{p.colaborador}}</li>
+                </ul>
+                <div class="card-body">
+                    <a href="{% url 'apps.discos:detalle_disco' p.pk %}" class="btn btn-primary"
+                        style="font-size: small;">Leer
+                        más</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+52- modificar post en el archi views.py de post
+
+class ModificarPost(UpdateView):
+    model = Post
+    fields = ['titulo','autor','texto','imagen','Categoria']
+    template_name = 'post/agregar_post.html'
+    success_url = reverse_lazy('inicio')
+
+
+53- eliminar post en el archi views.py de post
+
+class EliminarPost(DeleteView):
+    model = Post
+    template_name = 'post/confirma_eliminar.html'
+    success_url = 'inicio'
+
+54- para ver detalle del post:
+
+from django.views.generic import ListView, DetailView
+
+class PostDetalle(DetailView):
+    model = Post
+    template_name = 'post/post_detalle.html'
+    context_object_name = 'post'    
+
+55- generar path :
+
+from .views import AgregarCategoria, AgregarPost, ListarPost, ModificarPost, EliminarPost, PostDetalle
+
+path('modificar_post/<int:pk>', ModificarPost.as_view(), name='modificar_post'),
+    path('eliminar_post/<int:pk>', EliminarPost.as_view(), name='eliminar_post'),
+    path('detalle_post/<int:pk>', PostDetalle.as_view(), name='detalle_post'),
+
+56- crear los template: confirma_eliminar.html (lo dejamos generico para usar en otras eliminaciones)
+ 
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %}
+<title>confirma eliminar</title>
+{% endblock %}
+
+{% block navegacion %}
+{% include 'navegacion.html' %}
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <p>seguro que desea eliminar</p>
+    <input type="submit" value="Si, eliminar">
+    <a href="{% url 'inicio' %}"class="btn btn-primary">No, volver al inicio</a>
+</form>
+{% endblock %}
+
+
+---- para hacer colaborador un usuario lo puedo hacer desde la base de datos, modificando el numero 0 por un 1 ----
+
+post_detalle.html
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %}
+<title>{{Post.titulo}}</title>
+{% endblock %}
+
+{% block navegacion %}
+{% include 'navegacion.html' %}
+{% endblock %}
+
+{% block content %}
+{{% if user.es_colaborador %}}
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Administrar
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'apps.post:modificar_post' post.pk %}">Modificar post</a></li>
+        <li><a class="dropdown-item" href="{% url 'apps.post:eliminar_post' post.pk %}">Eliminar post</a></li>
+    </ul>
+</div>{% endif %}
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+            <div class="image-wrapper">
+                <img src="{{ post.imagen.url }}" class="d-block w-100">
+                <p style='text-align: center;' class="mbr-timeline-date "><small
+                        class="text-body-secondary">{{post.fecha_agregado}}</small></p>
+            </div>
+        </div>
+        <div class="col-12 col-lg">
+            <div class="text-wrapper">
+                <h2 class="mbr-section-title mbr-fonts-style mb-3 display-5"><strong>{{post.titulo}}</strong>
+                </h2>
+                <h4 class="mbr-section-title mbr-fonts-style mb-3 "><i>{{post.autor}}</i></h4>
+                <p class="mbr-text mbr-fonts-style display-7">{{post.letra}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+57- en apps : 
+	django-admin startapp opiniones
+
+modificar en apps.py
+
+name = 'apps.opiniones'
+
+58- vamos a models.py 
+
+from django.db import models
+from apps.usuarios.models import Usuarios
+from apps.post.models import Post
+
+# Create your models here.
+class Opinion(models.Model):
+    usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    texto = models.TextField()
+    fecha = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.texto
+
+    class Meta:
+        ordering = ['-fecha']
+
+59- crear  form.py  en opiniones
+
+from django import forms
+from .models import Opinion
+
+class OpinionForm(forms.ModelForm):
+
+    class Meta: 
+        model = Opinion
+        fields = ['texto']
+
+60- en views.py
+
+from django.shortcuts import render
+from .forms import OpinionForm
+# Create your views here.
+
+def AgregarOpinion(request):
+    form = OpinionForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        
+    contexto = {
+        'form': form,
+    }
+    
+    template_name = 'opiniones/agregar_opiniones.html'
+    return render(request, template_name, contexto)
+
+
+61-  en post/views.py comento class PostDetalle
+agrego/modifico las importaciones
+
+from django.shortcuts import render, redirect
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
+from .models import Categoria
+from .models import Post
+from apps.opiniones.models import Opinion
+from apps.opiniones.forms import OpinionForm
+
+agrego al final
+
+def post_detalle(request,id):
+    post = Post,object.get(id=id)
+    opiniones = Opinion.objects.filter(post=id)
+    form = OpinionForm(request.POST)
+    
+    if form.is_valid():
+        if request.user.is_authenticated:
+            aux = form.save(commit=False)
+            aux.post = post
+            aux.usuario = request.user
+            aux.save()
+            detalle_url = reverse('apps.post:detalle_post', kwargs={'id': post})
+            return HttpResponseRedirect(detalle_url)
+        else:
+            return redirect('apps.usuarios:iniciar_sesion')
+        
+    contexto = {
+        'post' : post,
+        'form': form,
+        'opiniones': opiniones
+    }
+        template_name = 'post/post_detalle.html'
+       return render(request,contexto,template_name)
+
+62- modificamos en post/urls.py 
+
+rom django.urls import path
+
+from .views import AgregarCategoria, AgregarPost, ListarPost, ModificarPost, EliminarPost, post_detalle
+
+app_name = 'apps.post'
+
+urlpatterns = [
+    path("agregar_categoria/", AgregarCategoria.as_view(), name='agregar_categoria'),
+    path("agregar_post/", AgregarPost.as_view(), name='agregar_post'),
+    path("listar_post/", ListarPost.as_view(), name='listar_post'),
+    path('modificar_post/<int:pk>', ModificarPost.as_view(), name='modificar_post'),
+    path('eliminar_post/<int:pk>', EliminarPost.as_view(), name='eliminar_post'),
+    path('detalle_post/<int:id>', post_detalle, name='detalle_post'),
+]
+
+63- crear en opiniones archivo urls.py
+
+from django.urls import path
+from .views import AgregarOpinion
+
+
+app_name = 'apps.opiniones'
+
+urlpatterns = [
+    path('agregar_opinion/', AgregarOpinion, name='agregar_opinion')
+]
+
+
+64- en urls generales :
+
+path('opiniones/', include('apps.opiniones.urls'))
+
+65- crear en template/opiniones agregar_opiniones.html :
+
+<div class="row justify-content-md-center ">
+    <div class="col-md-6">
+        <div class="list-group-item gap-3 py-3" aria-current="true">
+            <form method="POST" enctype="multipart/form-data">{%csrf_token%}
+                <div>
+                    {{form.as_p}}
+                </div>
+                {% if user.is_authenticated %}
+                <input class="btn btn-outline-secondary" type="submit" value="Guardar" />
+                {% else %}
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">
+                    Guardar
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Error</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Usted tiene que iniciar sesión o registrarse para poder opinar
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-outline-secondary" href="{% url 'apps.usuarios:iniciar_sesion' %}"
+                                    target="_blank">Iniciar sesión</a>
+                                <a class="btn btn-outline-secondary" href="{% url 'apps.usuarios:registrar' %}"
+                                    target="_blank">Registrarse</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+66- modificar post_detalles.html
+
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %}
+<title>{{ post.titulo }}</title>
+{% endblock %}
+
+{% block navegacion %}
+{% include 'navegacion.html' %}
+{% endblock %}
+
+{% block contenido %}
+{% if user.es_colaborador %}
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Administrar
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'apps.post:modificar_post' post.pk %}">Modificar post</a></li>
+        <li><a class="dropdown-item" href="{% url 'apps.post:eliminar_post' post.pk %}">Eliminar post</a></li>
+    </ul>
+</div>{% endif %}
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+            <div class="image-wrapper">
+                <img src="{{ post.imagen.url }}" class="d-block w-100">
+                <p style='text-align: center;' class="mbr-timeline-date "><small
+                        class="text-body-secondary">{{post.fecha_agregado}}</small></p>
+            </div>
+        </div>
+        <div class="col-12 col-lg">
+            <div class="text-wrapper">
+                <h2 class="mbr-section-title mbr-fonts-style mb-3 display-5"><strong>{{post.titulo}}</strong>
+                </h2>
+                <h4 class="mbr-section-title mbr-fonts-style mb-3 "><i>{{post.autor}}</i></h4>
+                <p class="mbr-text mbr-fonts-style display-7">{{post.letra}}</p>
+            </div>
+        </div>
+        {% for item in opiniones %}
+        {% if user.is_authenticated and user.id == item.usuario.id%}
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Opinion
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="{% url 'apps.opiniones:modificar_opinion' item.pk %}">Modificar
+                        opinion</a></li>
+                <li><a class="dropdown-item" href="{% url 'apps.opiniones:eliminar_opinion' item.pk %}">Eliminar
+                        opinion</a></li>
+            </ul>
+            {% endif %}
+            <div class="row justify-content-md-center ">
+                <div class="col-md-6">
+                    <div class="list-group-item d-flex gap-3 py-3" aria-current="true">
+                        <img src="{{ item.usuario.imagen.url }}" style="width:10%; height: 10%;" alt="twbs" width="40"
+                            height="40" class="rounded-circle flex-shrink-0">
+                        <div class="d-flex gap-2 w-100 justify-content-between">
+                            <div>
+                                <h6 class="mb-0">{{ item.usuario.username }}</h6>
+                                <p class="mb-0 text-break opacity-75">{{ item.texto }}</p>
+                            </div>
+                            <small class="opacity-50 text-nowrap">{{ item.fecha }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="mb-3 display-7">
+                {% include 'opiniones/agregar_opinion.html' %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+67- en opiniones/admin.py
+
+from django.contrib import admin
+from .models import Opinion
+# Register your models here.
+admin.site.register(Opinion)
+
+
+68- en setting.py instaler apps
+
+
+
+
+69- hacer py manage.py makemigrations
+
+py manage.py migrate 
+
+70- 
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,15 @@
+{% load static %}
+<nav>
+    <ul>
+        <li><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li><a href="{% url 'apps.post:agregar_categoria' %}">Categorías</a></li>
+        <li>Contatos</li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'apps.usuarios:cerrar_sesion' %}">Cerrar sesion</a></li>
+        {% else %}
+        <li><a href="{% url 'apps.usuarios:registrar' %}">Registrarse</a></li>
+        <li><a href="{% url 'apps.usuarios:iniciar_sesion' %}">Iniciar sesion</a></li>
+        {% endif %}
+        <li>Acerca de</li>
+    </ul>
+</nav>

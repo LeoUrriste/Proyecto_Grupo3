@@ -1,90 +1,84 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block titulo %}
 <title>Inicio</title>
 {% endblock %}
+
 {% block navegacion %}
 {% include 'navegacion.html' %}
 {% endblock %}
+
 {% block content %}
 
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                aria-label="Slide 3"></button>
-        </div>
-    </ol>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <div class="card-img-top" style="display: block; width: 50%; margin: auto;">
-                <img class="d-block w-100" src="{% static 'imagen/hadware.jpg' %}" alt="First slide">
-            </div>
-        </div>
-        <div class="carousel-item s">
-            <div class="card-img-top" style="display: block; width: 50%; margin: auto;">
-                <img class="d-block w-100" src="{% static 'imagen/redes.jpg' %}" alt="Second slide">
+<!--MATI: Hice el Carrusel de vuelta, elimina todo, menos el footer y pegá esto-->
+
+<div id="carouselExample" class="carousel slide" >
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+
+    <div class="carousel-inner" style="height: 800px;">
+        <div class="carousel-item active ">
+            <img src="{% static 'imagen/imagen_1.jpg' %}"  class="d-block w-100 c-img" alt="First slide">
+            <div class="carousel-caption d-none d-md-block">
+                <h2 class="fw-bold ">Artículos</h2>
+                <p class="fs-2">Nuestros expertos redactan los artículos más relevantes sobre Ciberseguridad. 
+                    Desde como protegerte del posibles estafas, hasta recomendaciones de software indispensable para una 
+                    conexión segura. Te invitamos a que leas nuestros posts.</p>
+                <a href="{% url 'apps.post:listar_post' %}" class="btn btn-primary">Ir a "Posts"</a>
             </div>
         </div>
         <div class="carousel-item">
-            <div class="card-img-top" style="display: block; width: 50%; margin: auto;">
-                <img class="d-block w-100" src="{% static 'imagen/software.jpg' %}" alt="Third slide">
+            <img src="{% static 'imagen/imagen_3.jpg' %}"  class="d-block w-100  c-img" alt="Second slide">
+            <div class="carousel-caption d-none d-md-block">
+                <h2 class="fw-bold ">Registrate</h2>
+                <p class="fs-2">Al registrarte puedes comentar acerca del contenido de cada post y puedes brindarnos tus 
+                    valiosos aportes. También puedes optar por formar parte de nuestra newsletter y enterarte por cada vez
+                    que un artículo se publica.
+                </p>
+                <a href="{% url 'apps.usuarios:registrar' %}" class="btn btn-primary">Ir a "Registrar"</a>
             </div>
         </div>
+
+        <div class="carousel-item">
+            <img src="{% static 'imagen/imagen_2.jpg' %}"  class="d-block w-100 c-img" alt="Third slide">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2 class="fw-bold ">Forma parte de nuestro equipo</h2>
+                    <p class="fs-2">
+                        Si crees que puedes brindar aportes valiosos a la comunidad de Ciberseguridad, no dudes en contactarte con
+                        nosotros en la sección de Contactos.
+                    </p>
+                    <a href="{% url 'contacto' %}" class="btn btn-primary">Ir a "Contacto"</a>
+                </div>
+        </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-        data-bs-slide="prev">
+    
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
+        <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-        data-bs-slide="next">
+    
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
+        <span class="visually-hidden">Next</span>
     </button>
+
+    
 </div>
+<!--MATI: Hasta acá tenés que copiar-->
 
-<!DOCTYPE html>
-<html lang="es">
+<!--Eliminá las etiquetas body de esta página-->
 
-<body>
-    <header>
-
-    </header>
-
-    <section>
-        <h2>¿Qué es la Ciberseguridad?</h2>
-        <p>La ciberseguridad es la práctica de proteger sistemas, redes y programas de ataques digitales. Estos ataques
-            buscan acceder, cambiar o destruir información sensible; extender malware; o realizar otras acciones
-            perjudiciales.</p>
-
-        <h2>Principales Amenazas</h2>
-        <ul>
-            <li>Malware</li>
-            <li>Phishing</li>
-            <li>Ataques de fuerza bruta</li>
-            <li>Vulnerabilidades de software</li>
-        </ul>
-
-        <h2>Consejos de Seguridad</h2>
-        <ol>
-            <li>Actualiza regularmente tus programas</li>
-            <li>Usa contraseñas fuertes y cambia periódicamente</li>
-            <li>Instala un software antivirus</li>
-            <li>Sé consciente del phishing y no hagas clic en enlaces sospechosos</li>
-        </ol>
-    </section>
-
+<!--MATI: esta parte no cambié nada-->
     <footer>
         <p>&copy; 2023 Página de Inicio - Ciberseguridad</p>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
     </footer>
-</body>
-
-</html>
-
 
 {% endblock %}

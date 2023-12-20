@@ -9,14 +9,19 @@
 {% endblock %}
 
 {% block content %}
+<!--MATI: Acá agregué un div con las class="common_div form_cardstyle"-->
+<div class="common_div form_cardstyle">
+    <!--MATI: esta parte no cambié nada-->
+    <form method="post">
+        {% csrf_token %}
+        
+        <h2>Agregar Categoria</h2>
+        <div>
+            {{form.as_p}}
+            <input type="submit" value="Guardar">
+        </div>
+    </form>
+<!--MATI: acá cierra el div que puse-->
+</div>
 
-<form method="post">
-    {% csrf_token %}
-    
-    <h2>Agregar Categoria</h2>
-    <div>
-        {{form.as_p}}
-        <input type="submit" value="Guardar">
-    </div>
-</form>
 {% endblock %}

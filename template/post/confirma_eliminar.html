@@ -9,7 +9,8 @@
 {% endblock %}
 
 {% block content %}
-<form method="post">
+<!--MATI: Acá agregué al form las class="common_div form_cardstyle"-->
+<form method="post" class="common_div form_cardstyle">
     {% csrf_token %}
     <p>seguro que desea eliminar</p>
     <input type="submit" value="Si, eliminar">

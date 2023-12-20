@@ -11,9 +11,16 @@
 
 {% block content %}
 
-<form enctype="multipart/form-data" action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Registrarse</button>
-</form>
+<!--MATI: acá encerré el form en un div con la class="common:div"-->
+<div class="common_div">
+    <!--MATI: en el form agregué la class="form_cardstyle"-->
+    <form enctype="multipart/form-data" action="" method="post" class="form_cardstyle">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Registrarse</button>
+    </form>
+<!--MATI: acá cierra el div que puse-->
+</div>
+
+
 
 {% endblock %}

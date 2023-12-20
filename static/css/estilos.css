@@ -1,0 +1,50 @@
+* {
+    margin: 0; padding: 0;  
+    }
+
+body {background-color: rgb(202, 202, 202);}
+
+.common_div { margin: 50px; padding: 50px;}
+
+.contenido-fondo {
+    background-color: rgb(232, 232, 232);
+    border: solid 0.5px gray 0.5;
+    border-radius: 0.5em;
+}
+
+.carousel-item {
+    height: 32rem;
+    background: #777 ;
+    color: white;
+    position: relative;
+}
+
+
+.c-img {
+    filter:brightness(0.5) ;
+}
+
+.con_div {
+    margin: 0%; padding: 1%;
+}
+
+.text-post {
+    text-align: justify;
+}
+
+.form_cardstyle {
+    padding: 5%;
+    background-color: rgb(232, 232, 232);
+    width: 50%;
+    border: solid 0.5px gray;
+    border-radius: 0.5em;
+}
+
+/* Container holding the image and the text */
+.container-banner {
+    position: relative;
+    text-align: center;
+    color: white;
+    width: 100vw;
+    }
+

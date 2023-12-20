@@ -10,5 +10,95 @@
 {% endblock %}
 
 {% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<div class="common_div contenido-fondo">
 
+    <body>
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Contacto</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                }
+
+                h2 {
+                    color: #333;
+                }
+
+                .contacto-form {
+                    max-width: 400px;
+                    margin: 20px auto;
+                }
+
+                .contacto-form label {
+                    display: block;
+                    margin-bottom: 8px;
+                }
+
+                .contacto-form input,
+                .contacto-form textarea {
+                    width: 100%;
+                    padding: 8px;
+                    margin-bottom: 16px;
+                    box-sizing: border-box;
+                }
+
+                .contacto-form button {
+                    background-color: #4CAF50;
+                    color: #fff;
+                    padding: 10px 15px;
+                    border: none;
+                    cursor: pointer;
+                }
+
+                .contacto-form button:hover {
+                    background-color: #45a049;
+                }
+            </style>
+        </head>
+        <section id="contacto">
+            <h2>Contacto</h2>
+
+            <div class="contacto-form">
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="mensaje">Mensaje:</label>
+                    <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+
+                    <button type="submit">Enviar Mensaje</button>
+                </form>
+            </div>
+        </section>
+        <section id="redes-sociales">
+            <h2>Síguenos en</h2>
+
+            <ul>
+                <!-- Enlaces a redes sociales con información genérica -->
+                <li><a href="https://facebook.com/tupagina" target="_blank">Facebook</a></li>
+                <li><a href="https://twitter.com/tupagina" target="_blank">Twitter</a></li>
+                <li><a href="https://instagram.com/tupagina" target="_blank">Instagram</a></li>
+                <!-- Puedes añadir más redes sociales según tus necesidades -->
+            </ul>
+        </section>
+
+        <!-- Pie de página -->
+        <footer>
+            <p>&copy; 2023 Tu Página. Todos los derechos reservados.</p>
+        </footer>
+
+    </body>
+</div>
+
+</html>
 {% endblock %}

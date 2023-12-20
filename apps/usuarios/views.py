@@ -22,7 +22,7 @@ class ActualizarUsuario(LoginRequiredMixin, UpdateView):
 class EliminarUsuario(LoginRequiredMixin, DeleteView):
     model = Usuarios
     template_name = 'post/confirma_eliminar.html'
-    success_url = reverse_lazy('apps,usuarios:listar_usuarios')
+    success_url = reverse_lazy('apps.usuarios:listar_usuarios')
     
 def listar_usuarios(request):
     usuarios = Usuarios.objects.all()
